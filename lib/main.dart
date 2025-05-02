@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:habit/page/habit_tracker_page.dart';
+import 'package:habit/page/habit_tracker_page.dart'; 
 
-void main() async {
-  await Supabase.initialize(url: '', anonKey: '');
-  runApp(const MainApp());
+void main() {
+  runApp(const MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/',
-      routes: {
-        '/habit/tracker': (context) => const HabitTrackerPage(),
-      },
+      title: 'Habit Tracker',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const HabitTrackerPage(),
     );
   }
 }
