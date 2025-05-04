@@ -17,11 +17,15 @@ class HabitTrackerPage extends StatelessWidget {
               subtitle: const Text('Deskripsi singkat habit'),
               leading: Checkbox(
                 value: false,
-                onChanged: (value) {},
+                onChanged: (value) {
+                  // Tambahkan logika jika diperlukan
+                },
               ),
               trailing: IconButton(
                 icon: const Icon(Icons.delete, color: Colors.red),
-                onPressed: () {},
+                onPressed: () {
+                  // Tambahkan logika jika diperlukan
+                },
               ),
             ),
           );
@@ -34,12 +38,12 @@ class HabitTrackerPage extends StatelessWidget {
             title: const Text('Tambah Habit'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
-              children: const [
+              children: [
                 TextField(
-                  decoration: InputDecoration(labelText: 'Nama'),
+                  decoration: const InputDecoration(labelText: 'Nama'),
                 ),
                 TextField(
-                  decoration: InputDecoration(labelText: 'Deskripsi'),
+                  decoration: const InputDecoration(labelText: 'Deskripsi'),
                 ),
               ],
             ),
@@ -51,9 +55,10 @@ class HabitTrackerPage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
+                  // Tambahkan logika untuk menyimpan habit baru
                 },
                 child: const Text('Simpan'),
-              )
+              ),
             ],
           ),
         ),

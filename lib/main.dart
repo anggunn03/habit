@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:habit/page/login_page.dart';
 import 'package:habit/page/habit_tracker_page.dart';
 
 Future<void> main() async {
@@ -14,10 +15,12 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/login', // mulai dari halaman login
+      initialRoute: '/habit_tracker',
       routes: {
-        '/habit_tracker': (context) => const HabitTrackerPage(),     
-     },
+        '/login': (context) => const LoginPage(),
+        '/habit_tracker': (context) => const HabitTrackerPage(),
+        
+      },
     );
   }
 }
