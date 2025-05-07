@@ -62,12 +62,20 @@ class _HabitPageState extends State<HabitPage> {
     if (confirmed == true) {
       final supabase = Supabase.instance.client;
       await supabase.from('habits').delete().eq('id', habit?.id ?? '');
-      Navigator.pop(context, 'OK');
+
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    habit = ModalRoute.of(context)?.settings.arguments as Habit?;
+    if (habit != null && !initialized) {
+      setState(() {
+        title = habit!.name;
+        description = habit!.description ?? '';
+        initialized = true;
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('${(habit != null) ? 'Edit' : 'Add'} Habit'),
