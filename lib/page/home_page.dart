@@ -23,11 +23,20 @@ class Habit {
   });
 
   factory Habit.fromJson(Map<String, dynamic> json) {
-    return Habit(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
-    );
+    return switch (json) {
+    {
+        'id': String id,
+        'name': String name,
+        'description': String? description,
+    } =>
+      Habit(
+        id: id,
+        name: name,
+        description: description,
+      ),
+    _ => throw Exception('Invalid Habit JSON'),
+    };
+
   }
 }
 
@@ -39,25 +48,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future<List<Map<String, dynamic>>> futureHabits;
-
-
+  late Future futureHabits;
 
   @override
   void initState() {
     super.initState();
+    futureHabits = _fetchHabits();
   }  
 
-  Future<void> _navigateToEdit(BuildContext context, Map<String, dynamic>? habit) async {
+  Future<void> _habitPage(BuildContext context, Object? arguments) async {
     final result = await Navigator.pushNamed(
       context,
-      '/habit/edit',
-      arguments: habit,
+      '/habit/page',
+      arguments: arguments,
     );
 
     if (result == 'OK') {
       setState(() {
-        
+        futureHabits = _fetchHabits();
       });
     }
   }
@@ -65,8 +73,37 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('HABIT'),
-      )
+      title: const Text('HABIT')),
+      body: Center(
+        child: FutureBuilder(
+          future: futureHabits,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  final habit = Habit.fromJson(snapshot.data[index]);
+                  return ListTile(
+                    title: Text(habit.name),
+                    subtitle: Text(habit.description ?? ''),
+                    onTap: () {
+                      _habitPage(context, habit);
+                    },
+                  );
+                },
+              );
+            } else if (snapshot.hasError) {
+              return const Text('Error loading habits');
+            } 
+            return const CircularProgressIndicator();
+          }, 
+          ),
+          ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _habitPage(context, null);
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

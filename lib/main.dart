@@ -18,8 +18,8 @@ class MainApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginPage(),
-        '/home_page': (context) => const HomePage(),
-        '/habit/edit': (context) => const HabitPage(),
+        '/home/page': (context) => const HomePage(),
+        '/habit/page': (context) => const HabitPage(),
       },
     );
   }
