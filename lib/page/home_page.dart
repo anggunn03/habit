@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-Future _fetchHabits() async {
+Future _fetchHabit() async {
   final supabase = Supabase.instance.client;
 
   final data = await supabase
-      .from('habits')
+      .from('habitnows')
       .select()
       .order('name');
+
       return data;
 }
 
@@ -19,7 +20,7 @@ class Habit {
   const Habit({
     required this.id,
     required this.name,
-    this.description,
+    required this.description,
   });
 
   factory Habit.fromJson(Map<String, dynamic> json) {
@@ -36,7 +37,6 @@ class Habit {
       ),
     _ => throw Exception('Invalid Habit JSON'),
     };
-
   }
 }
 
@@ -48,12 +48,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future futureHabits;
+  late Future futureHabit;
 
   @override
   void initState() {
     super.initState();
-    futureHabits = _fetchHabits();
+    futureHabit = _fetchHabit();
   }  
 
   Future<void> _habitPage(BuildContext context, Object? arguments) async {
@@ -65,10 +65,11 @@ class _HomePageState extends State<HomePage> {
 
     if (result == 'OK') {
       setState(() {
-        futureHabits = _fetchHabits();
+        futureHabit = _fetchHabit();
       });
     }
   }
+
 @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,10 +77,11 @@ class _HomePageState extends State<HomePage> {
       title: const Text('HABIT')),
       body: Center(
         child: FutureBuilder(
-          future: futureHabits,
+          future: futureHabit,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
+                itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   final habit = Habit.fromJson(snapshot.data[index]);
                   return ListTile(
@@ -92,12 +94,13 @@ class _HomePageState extends State<HomePage> {
                 },
               );
             } else if (snapshot.hasError) {
-              return const Text('Error loading habits');
-            } 
+              return Text('${snapshot.error}'); 
+            }
+
             return const CircularProgressIndicator();
           }, 
-          ),
-          ),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _habitPage(context, null);

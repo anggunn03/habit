@@ -14,31 +14,37 @@ class _HabitPageState extends State<HabitPage> {
   bool initialized = false;
 
   final _formkey = GlobalKey<FormState>();
-  String title = '';
+  String name= '';
   String description = '';
 
   Future save() async {
     if (_formkey.currentState!.validate()) {
       final supabase = Supabase.instance.client;
-
+      String message = 'Berhasil menyimpan habit';
+    
       if (habit != null) {
         await supabase
-        .from('habits')
+        .from('habitnows')
         .update({
-          'name': title,
+          'name': name,
           'description': description,
         })
         .eq('id', habit?.id ?? '');
-        
-        
+        message = 'Habit Berhasil diupdate';
       } else {
-        await supabase.from('habits').insert({
-          'name': title,
+        await supabase.from('habitnows').insert({
+          'name': name,
           'description': description,
         });
       }
-    }  
-  }  
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+      Navigator.pop<String>(context, 'OK');
+      }
+    }
+
+     
   Future delete() async {
     final confirmed = await showDialog<bool>(
       context: context, 
@@ -61,8 +67,12 @@ class _HabitPageState extends State<HabitPage> {
     );
     if (confirmed == true) {
       final supabase = Supabase.instance.client;
-      await supabase.from('habits').delete().eq('id', habit?.id ?? '');
+      await supabase.from('habitnows').delete().eq('id', habit?.id ?? '');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Habit berhasil dihapus')),
+      );
 
+      Navigator.pop(context, true);
     }
   }
 
@@ -71,38 +81,44 @@ class _HabitPageState extends State<HabitPage> {
     habit = ModalRoute.of(context)?.settings.arguments as Habit?;
     if (habit != null && !initialized) {
       setState(() {
-        title = habit!.name;
+        name = habit!.name;
         description = habit!.description ?? '';
+        });
         initialized = true;
-      });
     }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('${(habit != null) ? 'Edit' : 'Add'} Habit'),
-        actions: [
+        title: Text('${(habit != null) ? 'edit' : 'Tambahkan'} Habit'),
+        actions:
+        (habit != null) 
+        ? [
           IconButton(icon: const Icon(Icons.delete), 
           onPressed: delete),
         ]
+        : [],
       ),
       body: Form(
+        key: _formkey,
         child: Column(
           children: [
             TextFormField(
-              decoration: const InputDecoration(labelText: 'Habit Name'),
+              decoration: const InputDecoration(labelText: 'Nama Habit'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter a habit name';
+                  return 'masukkan nama habit';
                 }
                 return null;
               },
+              initialValue: name,
               onChanged: (value) {
                 setState(() {
-                  title = value;
+                  name = value;
                 });
               },
             ),
             TextFormField(
-              decoration: const InputDecoration(labelText: 'Description'),
+              decoration: const InputDecoration(labelText: 'Deskripsi Habit'),
               initialValue: description,
               onChanged: (value) {
                 setState(() {
@@ -110,7 +126,7 @@ class _HabitPageState extends State<HabitPage> {
                 });
               },
             ),
-            ElevatedButton(onPressed: save, child: const Text('Save')),
+            ElevatedButton(onPressed: save, child: const Text('Simpan')),
           ],
         ) 
       ),
