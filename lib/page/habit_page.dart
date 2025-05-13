@@ -20,17 +20,19 @@ class _HabitPageState extends State<HabitPage> {
   Future save() async {
     if (_formkey.currentState!.validate()) {
       final supabase = Supabase.instance.client;
-      String message = 'Berhasil menyimpan habit';
     
       if (habit != null) {
         await supabase
-        .from('habitnows')
-        .update({
-          'name': name,
-          'description': description,
-        })
-        .eq('id', habit?.id ?? '');
-        message = 'Habit Berhasil diupdate';
+            .from('habitnows')
+            .update({
+              'name': name,
+              'description': description,
+          })
+            .eq('id', habit?.id ?? '');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Habit berhasil diupdate')),
+        );
+
       } else {
         await supabase.from('habitnows').insert({
           'name': name,
@@ -38,7 +40,7 @@ class _HabitPageState extends State<HabitPage> {
         });
       }
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
+        const SnackBar(content: Text('Habit berhasil disimpan')),
       );
       Navigator.pop<String>(context, 'OK');
       }
@@ -51,7 +53,7 @@ class _HabitPageState extends State<HabitPage> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Hapus Habit'),
-          content: const Text('Apakah kamu yakin ingin menghapus kebiasaan ini?'),
+          content: const Text('Yakin ingin menghapus kebiasaan ini?'),
           actions: [
             TextButton(
             onPressed: () => Navigator.pop(context, false), 
@@ -65,6 +67,7 @@ class _HabitPageState extends State<HabitPage> {
         );
       },
     );
+
     if (confirmed == true) {
       final supabase = Supabase.instance.client;
       await supabase.from('habitnows').delete().eq('id', habit?.id ?? '');
@@ -72,16 +75,16 @@ class _HabitPageState extends State<HabitPage> {
         const SnackBar(content: Text('Habit berhasil dihapus')),
       );
 
-      Navigator.pop(context, true);
+      Navigator.pop<String>(context, 'OK');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    habit = ModalRoute.of(context)?.settings.arguments as Habit?;
+    habit = ModalRoute.of(context)!.settings.arguments as Habit?;
     if (habit != null && !initialized) {
       setState(() {
-        name = habit!.name;
+        name = habit?.name ?? '';
         description = habit!.description ?? '';
         });
         initialized = true;
@@ -97,39 +100,41 @@ class _HabitPageState extends State<HabitPage> {
           onPressed: delete),
         ]
         : [],
-      ),
-      body: Form(
-        key: _formkey,
-        child: Column(
-          children: [
-            TextFormField(
-              decoration: const InputDecoration(labelText: 'Nama Habit'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'masukkan nama habit';
-                }
+    ),
+    body: Form(
+      key: _formkey,
+      child: Column(
+        children: [
+          TextFormField(
+            decoration: const InputDecoration(labelText: 'Nama Habit'),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'masukkan nama habit';
+              }
                 return null;
-              },
-              initialValue: name,
-              onChanged: (value) {
-                setState(() {
-                  name = value;
-                });
-              },
-            ),
-            TextFormField(
-              decoration: const InputDecoration(labelText: 'Deskripsi Habit'),
-              initialValue: description,
-              onChanged: (value) {
-                setState(() {
-                  description = value;
-                });
-              },
-            ),
-            ElevatedButton(onPressed: save, child: const Text('Simpan')),
-          ],
-        ) 
-      ),
-    );
-  }
+            },
+            initialValue: name,
+            onChanged: (value) {
+              setState(() {
+                name = value;
+              });
+            },
+          ),
+          TextFormField(
+            decoration: const InputDecoration(labelText: 'Deskripsi Habit'),
+            initialValue: description,
+            onChanged: (value) {
+              setState(() {
+                description = value;
+              });
+            },
+          ),
+          ElevatedButton(
+            onPressed: save,
+            child: const Text('Simpan')),
+        ],
+      ) 
+    ),
+  );
+}
 }
