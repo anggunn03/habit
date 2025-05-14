@@ -24,19 +24,11 @@ class Habit {
   });
 
   factory Habit.fromJson(Map<String, dynamic> json) {
-    return switch (json) {
-    {
-        'id': String id,
-        'name': String name,
-        'description': String? description,
-    } =>
-      Habit(
-        id: id,
-        name: name,
-        description: description,
-      ),
-    _ => throw Exception('Invalid Habit JSON'),
-    };
+    return Habit( 
+        id: json['id'].toString(), // Konversi id menjadi String
+        name: json['name'] as String,
+        description: json['description'] as String?,
+    );
   }
 }
 

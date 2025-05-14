@@ -20,6 +20,7 @@ class _HabitPageState extends State<HabitPage> {
   Future save() async {
     if (_formkey.currentState!.validate()) {
       final supabase = Supabase.instance.client;
+      String message;
     
       if (habit != null) {
         await supabase
@@ -29,23 +30,23 @@ class _HabitPageState extends State<HabitPage> {
               'description': description,
           })
             .eq('id', habit?.id ?? '');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Habit berhasil diupdate')),
-        );
-
+        message = 'Habit berhasil diupdate';
+      
       } else {
         await supabase.from('habitnows').insert({
           'name': name,
           'description': description,
         });
+      
+        message = 'Habit berhasil ditambahkan';
       }
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Habit berhasil disimpan')),
+        SnackBar(content: Text(message)),
       );
       Navigator.pop<String>(context, 'OK');
-      }
-    }
-
+      } 
+  }  
      
   Future delete() async {
     final confirmed = await showDialog<bool>(
@@ -70,7 +71,10 @@ class _HabitPageState extends State<HabitPage> {
 
     if (confirmed == true) {
       final supabase = Supabase.instance.client;
+
       await supabase.from('habitnows').delete().eq('id', habit?.id ?? '');
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Habit berhasil dihapus')),
       );
@@ -101,40 +105,40 @@ class _HabitPageState extends State<HabitPage> {
         ]
         : [],
     ),
-    body: Form(
-      key: _formkey,
-      child: Column(
-        children: [
-          TextFormField(
-            decoration: const InputDecoration(labelText: 'Nama Habit'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'masukkan nama habit';
-              }
-                return null;
-            },
-            initialValue: name,
-            onChanged: (value) {
-              setState(() {
-                name = value;
-              });
-            },
-          ),
-          TextFormField(
-            decoration: const InputDecoration(labelText: 'Deskripsi Habit'),
-            initialValue: description,
-            onChanged: (value) {
-              setState(() {
-                description = value;
-              });
-            },
-          ),
-          ElevatedButton(
-            onPressed: save,
-            child: const Text('Simpan')),
-        ],
-      ) 
-    ),
-  );
-}
+      body: Form(
+        key: _formkey,
+        child: Column(
+          children: [
+            TextFormField(
+              decoration: const InputDecoration(labelText: 'Nama Habit'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'masukkan nama habit';
+                }
+                  return null;
+              },
+              initialValue: name,
+              onChanged: (value) {
+                setState(() {
+                  name = value;
+                });
+              },
+            ),
+            TextFormField(
+              decoration: const InputDecoration(labelText: 'Deskripsi Habit'),
+              initialValue: description,
+              onChanged: (value) {
+                setState(() {
+                  description = value;
+                });
+              },
+            ),
+            ElevatedButton(
+              onPressed: save,
+              child: const Text('Simpan')),
+          ],
+        ) 
+      ),
+    );
+  }
 }
