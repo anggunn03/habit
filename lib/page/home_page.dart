@@ -16,18 +16,21 @@ class Habit {
   final String id;
   final String name;
   final String? description;
+  final bool done;
 
   const Habit({
     required this.id,
     required this.name,
     required this.description,
+    this.done = false,
   });
 
   factory Habit.fromJson(Map<String, dynamic> json) {
     return Habit( 
-        id: json['id'].toString(), // Konversi id menjadi String
+        id: json['id'].toString(),// Konversi id menjadi String
         name: json['name'] as String,
         description: json['description'] as String?,
+        done: json['done'] as bool,
     );
   }
 }
@@ -48,6 +51,15 @@ class _HomePageState extends State<HomePage> {
     futureHabit = _fetchHabit();
   }  
 
+  Future <void> _updateHabitDone(String id, bool done) async {
+    final supabase = Supabase.instance.client;
+    await supabase
+        .from('habitnows')
+        . update({
+          'done': done})
+        .eq('id', id);
+  }
+
   Future<void> _habitPage(BuildContext context, Object? arguments) async {
     final result = await Navigator.pushNamed(
       context,
@@ -66,7 +78,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-      title: const Text('HABIT')),
+        title: const Text('HABIT')),
       body: Center(
         child: FutureBuilder(
           future: futureHabit,
@@ -76,12 +88,43 @@ class _HomePageState extends State<HomePage> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   final habit = Habit.fromJson(snapshot.data[index]);
-                  return ListTile(
-                    title: Text(habit.name),
-                    subtitle: Text(habit.description ?? ''),
-                    onTap: () {
+                  return Card(
+                    child: ListTile(
+                      title: Text(habit.name),
+                      subtitle: Text(habit.description ?? ''),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              habit.done ? Icons.check_box : Icons.check_box_outline_blank,
+                              color: habit.done ? Colors.green : null,
+                            ),
+                            onPressed: () {
+                              _updateHabitDone(habit.id, !habit.done);
+                              setState(() {
+                                futureHabit = _fetchHabit();
+                              });
+                            },
+                          ),    
+                          IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () {
+                              _habitPage(context, habit);
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              _habitPage(context, habit);
+                            },
+                          ),
+                        ],
+                      ),
+                      onTap: () {
                       _habitPage(context, habit);
                     },
+                  )
                   );
                 },
               );
