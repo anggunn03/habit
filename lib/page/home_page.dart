@@ -7,7 +7,7 @@ Future _fetchHabit() async {
   final data = await supabase
       .from('habitnows')
       .select()
-      .order('name');
+      .order('created_at', ascending: true);
 
       return data;
 }
@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
   }
 
 @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
     return Scaffold(
       appBar: AppBar(
         title: const Text('HABIT')),
@@ -115,16 +115,47 @@ class _HomePageState extends State<HomePage> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete),
-                            onPressed: () {
-                              _habitPage(context, habit);
-                            },
+                            onPressed: () async {
+                              final confirmed = await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text('Konfirmasi'),
+                                    content: const Text('Apakah Anda yakin ingin menghapus habit ini?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.of(context).pop(false),
+                                        child: const Text('Batal'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () => Navigator.of(context).pop(true),
+                                        child: const Text('Hapus'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              if (confirmed == true) {
+                                final supabase = Supabase.instance.client;
+                                await supabase
+                                    .from('habitnows')
+                                    .delete()
+                                    .eq('id', habit.id);
+                                if (!context.mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Habit berhasil dihapus'),
+                                  ),
+                                );
+                                setState(() {
+                                  futureHabit = _fetchHabit();
+                                });
+                              }
+                            }, 
                           ),
                         ],
                       ),
-                      onTap: () {
-                      _habitPage(context, habit);
-                    },
-                  )
+                    )
                   );
                 },
               );

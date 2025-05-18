@@ -47,41 +47,6 @@ class _HabitPageState extends State<HabitPage> {
       Navigator.pop<String>(context, 'OK');
       } 
   }  
-     
-  Future delete() async {
-    final confirmed = await showDialog<bool>(
-      context: context, 
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Hapus Habit'),
-          content: const Text('Yakin ingin menghapus kebiasaan ini?'),
-          actions: [
-            TextButton(
-            onPressed: () => Navigator.pop(context, false), 
-            child: const Text('Batal'),
-            ),
-            TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Hapus'),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (confirmed == true) {
-      final supabase = Supabase.instance.client;
-
-      await supabase.from('habitnows').delete().eq('id', habit?.id ?? '');
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Habit berhasil dihapus')),
-      );
-
-      Navigator.pop<String>(context, 'OK');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,14 +62,7 @@ class _HabitPageState extends State<HabitPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('${(habit != null) ? 'edit' : 'Tambahkan'} Habit'),
-        actions:
-        (habit != null) 
-        ? [
-          IconButton(icon: const Icon(Icons.delete), 
-          onPressed: delete),
-        ]
-        : [],
-    ),
+      ),
       body: Form(
         key: _formkey,
         child: Column(
