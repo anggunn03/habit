@@ -24,7 +24,7 @@ class _HabitPageState extends State<HabitPage> {
     
       if (habit != null) {
         await supabase
-            .from('habitnows')
+            .from('myhabit')
             .update({
               'name': name,
               'description': description,
@@ -33,7 +33,7 @@ class _HabitPageState extends State<HabitPage> {
         message = 'Habit berhasil diupdate';
       
       } else {
-        await supabase.from('habitnows').insert({
+        await supabase.from('myhabit').insert({
           'name': name,
           'description': description,
         });

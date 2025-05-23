@@ -5,7 +5,7 @@ Future _fetchHabit() async {
   final supabase = Supabase.instance.client;
 
   final data = await supabase
-      .from('habitnows')
+      .from('myhabit')
       .select()
       .order('created_at', ascending: true);
 
@@ -27,7 +27,7 @@ class Habit {
 
   factory Habit.fromJson(Map<String, dynamic> json) {
     return Habit( 
-        id: json['id'].toString(),// Konversi id menjadi String
+        id: json['id'] as String,// Konversi id menjadi String
         name: json['name'] as String,
         description: json['description'] as String?,
         done: json['done'] as bool,
@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
   Future <void> _updateHabitDone(String id, bool done) async {
     final supabase = Supabase.instance.client;
     await supabase
-        .from('habitnows')
+        .from('myhabit')
         . update({
           'done': done})
         .eq('id', id);
