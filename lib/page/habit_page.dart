@@ -30,7 +30,7 @@ class _HabitPageState extends State<HabitPage> {
               'description': description,
           })
             .eq('id', habit?.id ?? '');
-        message = 'Habit berhasil diupdate';
+        message = 'Habit berhasil diubah';
       
       } else {
         await supabase.from('myhabit').insert({
@@ -61,7 +61,7 @@ class _HabitPageState extends State<HabitPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${(habit != null) ? 'edit' : 'Tambahkan'} Habit'),
+        title: Text('${(habit != null) ? 'Edit' : 'Tambahkan'} Habit'),
       ),
       body: Form(
         key: _formkey,
