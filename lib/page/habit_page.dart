@@ -30,7 +30,7 @@ class _HabitPageState extends State<HabitPage> {
               'description': description,
           })
             .eq('id', habit?.id ?? '');
-        message = 'Habit berhasil diubah';
+        message = 'Berhasil mengubah kebiasaan';
       
       } else {
         await supabase.from('myhabit').insert({
@@ -38,7 +38,7 @@ class _HabitPageState extends State<HabitPage> {
           'description': description,
         });
       
-        message = 'Habit berhasil ditambahkan';
+        message = 'Berhasil menambahkan kebiasaan';
       }
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -61,17 +61,17 @@ class _HabitPageState extends State<HabitPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${(habit != null) ? 'Edit' : 'Tambahkan'} Habit'),
+        title: Text('${(habit != null) ? 'Edit' : 'Tambahkan'} Kebiasaan'),
       ),
       body: Form(
         key: _formkey,
         child: Column(
           children: [
             TextFormField(
-              decoration: const InputDecoration(labelText: 'Nama Habit'),
+              decoration: const InputDecoration(labelText: 'Nama Kebiasaan'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'masukkan nama habit';
+                  return 'Masukkan nama kebiasaan';
                 }
                   return null;
               },
@@ -83,7 +83,7 @@ class _HabitPageState extends State<HabitPage> {
               },
             ),
             TextFormField(
-              decoration: const InputDecoration(labelText: 'Deskripsi Habit'),
+              decoration: const InputDecoration(labelText: 'Deskripsi Singkat'),
               initialValue: description,
               onChanged: (value) {
                 setState(() {

@@ -27,7 +27,7 @@ class Habit {
 
   factory Habit.fromJson(Map<String, dynamic> json) {
     return Habit( 
-        id: json['id'] as String,// Konversi id menjadi String
+        id: json['id'] as String,
         name: json['name'] as String,
         description: json['description'] as String?,
         done: json['done'] as bool,
@@ -121,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                                 builder: (context) {
                                   return AlertDialog(
                                     title: const Text('Konfirmasi'),
-                                    content: const Text('Apakah Anda yakin ingin menghapus habit ini?'),
+                                    content: const Text('Apakah anda yakin ingin menghapus kebiasaan ini?'),
                                     actions: [
                                       TextButton(
                                         onPressed: () => Navigator.of(context).pop(false),
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                               if (confirmed == true) {
                                 final supabase = Supabase.instance.client;
                                 await supabase
-                                    .from('habitnows')
+                                    .from('myhabit')
                                     .delete()
                                     .eq('id', habit.id);
                                 if (!context.mounted) return;
