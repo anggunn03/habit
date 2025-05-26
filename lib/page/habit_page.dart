@@ -82,6 +82,8 @@ class _HabitPageState extends State<HabitPage> {
                 });
               },
             ),
+
+            
             TextFormField(
               decoration: const InputDecoration(labelText: 'Deskripsi Singkat'),
               initialValue: description,
@@ -91,6 +93,8 @@ class _HabitPageState extends State<HabitPage> {
                 });
               },
             ),
+
+            const SizedBox(height : 20),
             ElevatedButton(
               onPressed: save,
               child: const Text('Simpan')),
