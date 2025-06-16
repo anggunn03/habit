@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:habit/page/login_page.dart';
+import 'package:habit/page/welcome_page.dart';
 import 'package:habit/page/home_page.dart';
 import 'package:habit/page/habit_page.dart';
 Future<void> main() async {
@@ -17,9 +17,9 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/login',
+      initialRoute: '/welcome',
       routes: {
-        '/login': (context) => const LoginPage(),
+        '/welcome': (context) => const WelcomePage(),
         '/home/page': (context) => const HomePage(),
         '/habit/page': (context) => const HabitPage(),
 
