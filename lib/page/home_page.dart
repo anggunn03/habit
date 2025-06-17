@@ -90,6 +90,10 @@ class _HomePageState extends State<HomePage> {
                   final habit = Habit.fromJson(snapshot.data[index]);
                   return Card(
                     child: ListTile(
+                      leading: Icon(
+                        habit.done ? Icons.check_circle : Icons.radio_button_unchecked,
+                        color: habit.done ? Colors.green : null,
+                      ),
                       title: Text(habit.name),
                       subtitle: Text(habit.description ?? ''),
                       trailing: Row(
