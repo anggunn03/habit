@@ -90,38 +90,36 @@ class _HomePageState extends State<HomePage> {
                   final habit = Habit.fromJson(snapshot.data[index]);
                   return Card(
                     child: ListTile(
-                      leading: Icon(
-                        habit.done ? Icons.check_circle : Icons.radio_button_unchecked,
-                        color: habit.done ? Colors.green : null,
+                      leading: IconButton(
+                        icon: Icon(
+                          habit.done ? Icons.check_circle : Icons.radio_button_unchecked,
+                          color: habit.done ? Colors.green : null,
+                        ),
+                        onPressed: () {
+                          _updateHabitDone(habit.id, !habit.done);
+                          setState(() {
+                            futureHabit = _fetchHabit();
+                          });
+                        }
                       ),
+                    
                       title: Text(habit.name),
                       subtitle: Text(habit.description ?? ''),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            icon: Icon(
-                              habit.done ? Icons.check_box : Icons.check_box_outline_blank,
-                              color: habit.done ? Colors.green : null,
-                            ),
-                            onPressed: () {
-                              _updateHabitDone(habit.id, !habit.done);
-                              setState(() {
-                                futureHabit = _fetchHabit();
-                              });
-                            },
-                          ),    
-                          IconButton(
                             icon: const Icon(Icons.edit),
                             onPressed: () {
                               _habitPage(context, habit);
                             },
-                          ),
+                          ),    
+                          
                           IconButton(
                             icon: const Icon(Icons.delete),
                             onPressed: () async {
                               final confirmed = await showDialog(
-                                context: context,
+                                context: context, 
                                 builder: (context) {
                                   return AlertDialog(
                                     title: const Text('Konfirmasi'),
@@ -129,15 +127,15 @@ class _HomePageState extends State<HomePage> {
                                     actions: [
                                       TextButton(
                                         onPressed: () => Navigator.of(context).pop(false),
-                                        child: const Text('Batal'),
+                                         child: const Text('Batal'),
                                       ),
                                       TextButton(
                                         onPressed: () => Navigator.of(context).pop(true),
-                                        child: const Text('Hapus'),
+                                         child: const Text('Hapus'),
                                       ),
                                     ],
                                   );
-                                },
+                                }
                               );
                               if (confirmed == true) {
                                 final supabase = Supabase.instance.client;
@@ -155,20 +153,19 @@ class _HomePageState extends State<HomePage> {
                                   futureHabit = _fetchHabit();
                                 });
                               }
-                            }, 
+                            },
                           ),
                         ],
                       ),
-                    )
+                    ),
                   );
                 },
               );
             } else if (snapshot.hasError) {
-              return Text('${snapshot.error}'); 
+              return Text('${snapshot.error}');
             }
-
-            return const CircularProgressIndicator();
-          }, 
+            return const Center(child: CircularProgressIndicator());
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton(
