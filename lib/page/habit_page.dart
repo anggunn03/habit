@@ -63,7 +63,13 @@ class _HabitPageState extends State<HabitPage> {
       appBar: AppBar(
         backgroundColor: Colors.blue[50],
         centerTitle: true,
-        title: Text('${(habit != null) ? 'Edit' : 'Tambahkan'} Kebiasaan'),
+        title: Text('${(habit != null) ? 'Edit' : 'Tambahkan'} Kebiasaan',
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
