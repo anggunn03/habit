@@ -12,7 +12,13 @@ class WelcomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Selamat Datang di Aplikasi Habit Tracker',
+              'Selamat Datang di Aplikasi',
+              textAlign: TextAlign.center, //judul ditengah
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const Text(
+              'Habit Tracker',
+              textAlign: TextAlign.center, //judul ditengah
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
@@ -25,7 +31,7 @@ class WelcomePage extends StatelessWidget {
             const SizedBox(height : 40),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: const Color.fromARGB(255, 33, 82, 243),
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),

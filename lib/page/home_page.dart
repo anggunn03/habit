@@ -126,16 +126,21 @@ class _HomePageState extends State<HomePage> {
                                 context: context, 
                                 builder: (context) {
                                   return AlertDialog(
+                                    backgroundColor: Colors.white,
                                     title: const Text('Konfirmasi'),
                                     content: const Text('Apakah anda yakin ingin menghapus kebiasaan ini?'),
                                     actions: [
                                       TextButton(
                                         onPressed: () => Navigator.of(context).pop(false),
-                                         child: const Text('Batal'),
+                                        child: const Text('Batal',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
                                       ),
                                       TextButton(
                                         onPressed: () => Navigator.of(context).pop(true),
-                                         child: const Text('Hapus'),
+                                        child: const Text('Hapus',
+                                          style: TextStyle(color: Colors.black),
+                                        )
                                       ),
                                     ],
                                   );
@@ -173,7 +178,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color.fromARGB(255, 33, 82, 243),
         foregroundColor: Colors.white,
         onPressed: () {
           _habitPage(context, null);

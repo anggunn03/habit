@@ -61,14 +61,40 @@ class _HabitPageState extends State<HabitPage> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue[50],
+        centerTitle: true,
         title: Text('${(habit != null) ? 'Edit' : 'Tambahkan'} Kebiasaan'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Form(
         key: _formkey,
-        child: Column(
-          children: [
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start, //label rata kiri
+            children: [
+              const Text(
+                'Nama Kebiasaan',
+                style: TextStyle(fontSize: 16, color: Colors.black),
+              ),
+
             TextFormField(
-              decoration: const InputDecoration(labelText: 'Nama Kebiasaan'),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey, width : 1),
+                  ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width : 1),
+                ),  
+                fillColor: Colors.white,
+                filled: true,
+              ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Masukkan nama kebiasaan';
@@ -82,10 +108,25 @@ class _HabitPageState extends State<HabitPage> {
                 });
               },
             ),
-
+            const SizedBox(height : 20),
+            const Text(
+              'Deskripsi Singkat',
+              style: TextStyle(fontSize: 16, color: Colors.black),
+            ),
             
             TextFormField(
-              decoration: const InputDecoration(labelText: 'Deskripsi Singkat'),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey, width : 1),
+                  ),
+                
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width : 1),
+                ),
+                fillColor: Colors.white,
+                filled: true,
+              ),
               initialValue: description,
               onChanged: (value) {
                 setState(() {
@@ -95,12 +136,22 @@ class _HabitPageState extends State<HabitPage> {
             ),
 
             const SizedBox(height : 20),
-            ElevatedButton(
-              onPressed: save,
-              child: const Text('Simpan')),
-          ],
-        ) 
-      ),
+            Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 33, 82, 243),
+                  foregroundColor: Colors.white,
+                  shape: const StadiumBorder(),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16)
+                ),
+                
+                onPressed: save,
+                child: const Text('Simpan')),
+            )
+            ],
+          ) 
+        ),
+      )
     );
   }
 }
