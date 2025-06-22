@@ -80,7 +80,13 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.blue[50],
         centerTitle: true,
-        title: const Text('Habit Tracker')),
+        title: const Text('Habit Tracker',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: Center(
         child: FutureBuilder(
           future: futureHabit,
