@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:habit/page/welcome_page.dart';
 import 'package:habit/page/home_page.dart';
@@ -17,6 +18,10 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.blue[50],
+      )
+      ,
       initialRoute: '/welcome',
       routes: {
         '/welcome': (context) => const WelcomePage(),

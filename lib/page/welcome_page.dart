@@ -24,10 +24,21 @@ class WelcomePage extends StatelessWidget {
             ),
             const SizedBox(height : 40),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
               onPressed: () {
                 Navigator.pushNamed(context, '/home/page');
               },
-              child: const Text('Mulai Sekarang'),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: Text('Mulai Sekarang'),
+              )
             ),
           ],
         )),

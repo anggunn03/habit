@@ -89,6 +89,7 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   final habit = Habit.fromJson(snapshot.data[index]);
                   return Card(
+                    color: Colors.white,
                     child: ListTile(
                       leading: IconButton(
                         icon: Icon(
@@ -109,14 +110,15 @@ class _HomePageState extends State<HomePage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.edit),
+                            icon: const Icon(Icons.edit, color: Colors.black),
                             onPressed: () {
                               _habitPage(context, habit);
                             },
                           ),    
                           
                           IconButton(
-                            icon: const Icon(Icons.delete),
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            tooltip: 'Hapus Kebiasaan',
                             onPressed: () async {
                               final confirmed = await showDialog(
                                 context: context, 
@@ -146,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                                 if (!context.mounted) return;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text('Habit berhasil dihapus'),
+                                    content: Text('Kebiasaan berhasil dihapus'),
                                   ),
                                 );
                                 setState(() {
@@ -162,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                 },
               );
             } else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
+              return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
             }
             return const Center(child: CircularProgressIndicator());
           },
