@@ -78,7 +78,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {  
     return Scaffold(
       appBar: AppBar(
-        title: const Text('HABIT')),
+        backgroundColor: Colors.blue[50],
+        centerTitle: true,
+        title: const Text('Habit Tracker')),
       body: Center(
         child: FutureBuilder(
           future: futureHabit,
