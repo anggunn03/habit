@@ -16,9 +16,9 @@ class Habit {
   final String id;
   final String name;
   final String? description;
-  final bool done;
+  bool done;
 
-  const Habit({
+  Habit({
     required this.id,
     required this.name,
     required this.description,
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           _updateHabitDone(habit.id, !habit.done);
                           setState(() {
-                            futureHabit = _fetchHabit();
+                            snapshot.data[index]['done'] = !habit.done;
                           });
                         }
                       ),
