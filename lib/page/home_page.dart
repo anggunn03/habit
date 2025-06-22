@@ -83,6 +83,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Habit Tracker',
           style: TextStyle(
             color: Colors.black,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
